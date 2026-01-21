@@ -6,11 +6,15 @@ const commands = [
     name: 'hey',
     description: 'Replies with hey!',
   },
+  {
+    name: 'ping',
+    description: 'pong',
+  },
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
-async () => {
+(async () => {
   try {
     console.log('Registering slash commands...');
 
@@ -26,4 +30,4 @@ async () => {
   } catch (error) {
     console.log(`There was an error: ${error}`);
   }
-};
+})();

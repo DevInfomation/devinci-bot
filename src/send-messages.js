@@ -1,5 +1,5 @@
 import 'dotenv/config.js';
-import { Client, IntentsBitField, EmbedBuilder, ActionRowBuilder } from 'discord.js';
+import { Client, IntentsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 const client = new Client({
   intents: [
@@ -25,12 +25,24 @@ const roles = [
     },
 ]
 
-client.on('clientReady', async c => {
+client.on('clientReady', async () => {
     try {
-        const channel = await client.channels.get('1333519665183330437');
+        const channel = client.channels.cache.get('1333519665183330437');
         if (!channel) return;
 
         const row = new ActionRowBuilder();
+
+        roles.forEach(role => {
+            row.components.push(
+                new ButtonBuilder().setCustomId(role.id).setLabel(role.label).setStyle(ButtonStyle.Primary)
+            );
+        })
+
+        await channel.send({
+            content: "Claim or remove a role",
+            components: [row],
+        });
+        process.exit();
     } catch (error) {
         console.log(error);
     }

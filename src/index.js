@@ -14,45 +14,74 @@ client.on('clientReady', c => {
   console.log(`${c.user.tag} is online`);
 });
 
-client.on('interactionCreate', interaction => {
-  if (!interaction.isChatInputCommand()) return;
+client.on('interactionCreate', async (interaction) => {
+  try {
+    if (!interaction.isButton()) return;
+    await interaction.deferReply({ ephemeral: true });
 
-  //   if (interaction.commandName === 'hey') {
-  //     interaction.reply('hey!');
-  //   }
+    const role = interaction.guild.roles.cache.get(interaction.customId);
 
-  //   if (interaction.commandName === 'ping') {
-  //     interaction.reply('pong');
-  //   }
+    if (!role) {
+      interaction.editReply({
+        content: "I couldn't find that role",
+      });
+      return;
+    }
 
-  //   if (interaction.commandName === 'add') {
-  //     const num1 = interaction.options.get('first-number').value;
-  //     const num2 = interaction.options.get('second-number').value;
+    const hasRole = interaction.member.roles.cache.has(role.id);
 
-  //     interaction.reply(`The sum is: ${num1 + num2}`);
-  //   }
+    if (hasRole) {
+      await interaction.member.roles.remove(role);
+      await interaction.editReply(`The role ${role} has been removed`);
+      return;
+    }
 
-  if (interaction.commandName === 'embed') {
-    const embed = new EmbedBuilder()
-      .setTitle('Embed title')
-      .setDescription('This is an embed description')
-      .setColor('Random')
-      .addFields(
-        {
-          name: 'Field title',
-          value: 'Some random value',
-          inline: true,
-        },
-        {
-          name: 'Second Field title',
-          value: 'Some second random value',
-          inline: true,
-        },
-      );
-
-    interaction.reply({ embeds: [embed] });
+    await interaction.member.roles.add(role);
+    await interaction.editReply(`The role ${role} has been added.`);
+  } catch (error) {
+    console.log(error);
   }
 });
+
+// client.on('interactionCreate', interaction => {
+//   if (!interaction.isChatInputCommand()) return;
+
+//     if (interaction.commandName === 'hey') {
+//       interaction.reply('hey!');
+//     }
+
+//     if (interaction.commandName === 'ping') {
+//       interaction.reply('pong');
+//     }
+
+//     if (interaction.commandName === 'add') {
+//       const num1 = interaction.options.get('first-number').value;
+//       const num2 = interaction.options.get('second-number').value;
+
+//       interaction.reply(`The sum is: ${num1 + num2}`);
+//     }
+
+//   if (interaction.commandName === 'embed') {
+//     const embed = new EmbedBuilder()
+//       .setTitle('Embed title')
+//       .setDescription('This is an embed description')
+//       .setColor('Random')
+//       .addFields(
+//         {
+//           name: 'Field title',
+//           value: 'Some random value',
+//           inline: true,
+//         },
+//         {
+//           name: 'Second Field title',
+//           value: 'Some second random value',
+//           inline: true,
+//         },
+//       );
+
+//     interaction.reply({ embeds: [embed] });
+//   }
+// });
 
 client.on('messageCreate', message => {
   if (message.content === 'embed') {
@@ -81,8 +110,11 @@ client.on('messageCreate', message => {
   if (message.author.bot) return;
 
   if (message.content === 'hello') {
-    message.reply('hello');
+    message.reply(
+      'Why out of all people did you bring me back to life?!\nDevinci went offline',
+    );
   }
 });
+
 
 client.login(process.env.TOKEN);

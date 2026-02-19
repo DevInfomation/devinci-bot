@@ -8,6 +8,9 @@ export default async (client, guildId) => {
         applicationCommands = client.application.commands;
     }
 
+    // console.log("Client application:", client.application);
+    // console.log("Client guilds:", client.guilds);
+
     await applicationCommands.fetch();
     return applicationCommands;
 }

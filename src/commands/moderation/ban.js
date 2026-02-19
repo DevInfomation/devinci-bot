@@ -1,15 +1,15 @@
 import { ApplicationCommandOptionType, PermissionFlagsBits } from 'discord.js';
 
-export default () => {
-  name: 'ban';
-  description: 'Bans a member from the server';
-  // devOnly: Boolean,
-  // testOnly: Boolean,
+export default {
+  name: 'ban',
+  description: 'Bans a member!!!',
+  devOnly: Boolean,
+  testOnly: Boolean,
   options: [
     {
       name: 'target-user',
       description: 'The user to ban.',
-      require: true,
+      required: true,
       type: ApplicationCommandOptionType.Mentionable,
     },
     {
@@ -17,10 +17,11 @@ export default () => {
       description: 'The reason for banning',
       type: ApplicationCommandOptionType.String,
     },
-  ];
-  permissionsRequired: [PermissionFlagsBits.Administrator];
+  ],
+  permissionsRequired: [PermissionFlagsBits.Administrator],
+  botPermissions: [PermissionFlagsBits.Administrator],
 
   callback: (client, interaction) => {
     interaction.reply(`ban...`);
-  };
-};
+  },
+}

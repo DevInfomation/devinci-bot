@@ -1,14 +1,14 @@
-import testServer from '../../../config.json' with { type: 'json' };
+import config from '../../../config.json' with { type: 'json' };
 import areCommandsDifferent from '../../utils/areCommandsDifferent.js';
 import getApplicationCommands from '../../utils/getApplicationCommands.js';
 import getLocalCommands from '../../utils/getLocalCommands.js';
 
 export default async client => {
   try {
-    const localCommands = getLocalCommands();
+    const localCommands = await getLocalCommands();
     const applicationCommands = await getApplicationCommands(
       client,
-      testServer,
+      config.testServer
     );
 
     for (const localCommand of localCommands) {
